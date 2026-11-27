@@ -1,0 +1,19 @@
+import { Controller, Post, Body, HttpCode } from '@nestjs/common';
+import { AuthService } from './auth.service.js';
+import { Role } from '../generated/prisma/enums.js';
+
+@Controller('auth')
+export class AuthController {
+  constructor(private readonly authService: AuthService) {}
+
+  @Post('register')
+  register(@Body() body: { email: string; password: string; role: Role }) {
+    return this.authService.register(body.email, body.password, body.role);
+  }
+
+  @Post('login')
+  @HttpCode(200)
+  login(@Body() body: { email: string; password: string }) {
+    return this.authService.login(body.email, body.password);
+  }
+}
